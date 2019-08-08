@@ -8,14 +8,14 @@ jobs:
       - image: circleci/node:9.11
       - image: circleci/redis:latest
       - image: circleci/mongo:latest
-        command: [mongod, --replSet, rs0]
+          command: [mongod, --replSet, rs0]
       - image: circleci/rabbitmq:3.7.7
-        environment:
-          RABBITMQ_DEFAULT_VHOST: "/"
-        ports:
-          - "15672:15672"
-          - "5672:5672"
-          - "6379:6379"
+          environment:
+            RABBITMQ_DEFAULT_VHOST: "/"
+          ports:
+            - "15672:15672"
+            - "5672:5672"
+            - "6379:6379"
 
     working_directory: ~/repo
 
