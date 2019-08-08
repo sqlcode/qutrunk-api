@@ -1,4 +1,6 @@
 version: 2
+orbs:
+  codecov: codecov/codecov@1.0.4
 jobs:
   build:
     docker:
@@ -19,6 +21,9 @@ jobs:
 
     steps:
       - checkout
+      - codecov/upload:
+          file: .nyc_output/*.json
+          token: $CODECOV_TOKEN
       - run: sleep 10
 
       - run: sudo apt-get install mongodb-clients
@@ -56,6 +61,7 @@ jobs:
       
       
       - run: npm run test
+
 
 workflows:
   version: 2
