@@ -24,7 +24,7 @@ and pull it with another
 curl --request GET --url 'https://app.qutrunk.com/api/v1/core/pull/{QUEUE_NAME}?access_token={ACCESS_TOKEN}'
 ```
 
-More examples in Golang, Node.js, Java, PHP in (docs)[https://github.com/spinache/qutrunk-api/wiki/6.-Example-HTTP-push-in-Go-Node.js-PHP-Java-curl]
+More examples in Golang, Node.js, Java, PHP in [docs](https://github.com/spinache/qutrunk-api/wiki/6.-Example-HTTP-push-in-Go-Node.js-PHP-Java-curl)
 
 # Supported protocols for ingest/digest of messages
 - [x] HTTP(S)
