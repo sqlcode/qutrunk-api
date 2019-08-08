@@ -6,7 +6,7 @@
     "dev": "node ./bin/run",
     "test": "export TEST=1; ./node_modules/mocha/bin/mocha --timeout 10000 --exit",
     "test_debug": "export TEST=1; ./node_modules/mocha/bin/mocha debug --timeout 10000 --exit",
-    "test_coverage": "export TEST=1; ./node_modules/nyc/bin/nyc.js ./node_modules/mocha/bin/mocha --timeout 10000 --exit"
+    "test_coverage": "export TEST=1; ./node_modules/nyc/bin/nyc.js --exclude=routes/passport.js --exclude=lib/mailer.js --exclude=swagger.js --exclude=lib/fixtures.js --exclude=test/* ./node_modules/mocha/bin/mocha --timeout 10000 --exit"
   },
   "dependencies": {
     "@grpc/proto-loader": "^0.4.0",
