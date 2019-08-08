@@ -1,4 +1,4 @@
-# Qutrunk
+# Qutrunk [![CircleCI](https://circleci.com/gh/spinache/qutrunk-api.svg?style=svg)](https://circleci.com/gh/spinache/qutrunk-api) [![codecov](https://codecov.io/gh/spinache/qutrunk-api/branch/master/graph/badge.svg)](https://codecov.io/gh/spinache/qutrunk-api) 
 Qutrunk is a managed queue-as-a-service. Using the simple REST API, you push and pull messages without worrying about queue reliability. Qutrunk supports multiple backends as well as access control using access tokens and statistics, all via the web interface. [Read more about architecture in docs](https://github.com/spinache/qutrunk-api/wiki)
 
 # Features
