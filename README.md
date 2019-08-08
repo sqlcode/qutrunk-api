@@ -1,5 +1,5 @@
 # Qutrunk
-Qutrunk is a managed queue-as-a-service. Using the simple REST API, you push and pull messages without worrying about queue reliability. Qutrunk supports multiple backends as well as access control using access tokens and statistics, all via the web interface. [Read more about architecture in docs](https://github.com/spinache/qutrunk-api/wiki/Architecture-overview)
+Qutrunk is a managed queue-as-a-service. Using the simple REST API, you push and pull messages without worrying about queue reliability. Qutrunk supports multiple backends as well as access control using access tokens and statistics, all via the web interface. [Read more about architecture in docs](https://github.com/spinache/qutrunk-api/wiki)
 
 # Features
 * 5 minutes setup
@@ -23,6 +23,8 @@ and pull it with another
 ```sh
 curl --request GET --url 'https://app.qutrunk.com/api/v1/core/pull/{QUEUE_NAME}?access_token={ACCESS_TOKEN}'
 ```
+
+More examples in Golang, Node.js, Java, PHP in (docs)[https://github.com/spinache/qutrunk-api/wiki/6.-Example-HTTP-push-in-Go-Node.js-PHP-Java-curl]
 
 # Supported protocols for ingest/digest of messages
 - [x] HTTP(S)
@@ -53,10 +55,10 @@ cd qutrunk-api;
 npm install;
 cp config.js.dist config.js;
 ```
-For in-depth configuration please refer to [documentation](https://github.com/spinache/qutrunk-api/wiki/Architecture-overview)
+For in-depth configuration please refer to [documentation](https://github.com/spinache/qutrunk-api/wiki)
 # Running
 We recommend starting at least two Node.js processes that listen to HTTP requests.
-You can setup a reverse proxy like Nginx in front of those processes that will also handle SSL handshakes. For more details refer to docs.
+You can setup a reverse proxy like Nginx in front of those processes that will also handle SSL handshakes. For more details refer to [docs](https://github.com/spinache/qutrunk-api/wiki).
 ```
 pm2 start --name=app_3001 app.js -- --port=3001
 pm2 start --name=app_3002 app.js -- --port=3002
