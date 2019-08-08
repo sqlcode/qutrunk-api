@@ -1,6 +1,4 @@
-version: 2.1
-orbs:
-  codecov: codecov/codecov@1.0.4
+version: 2
 jobs:
   build:
     docker:
@@ -8,22 +6,19 @@ jobs:
       - image: circleci/node:9.11
       - image: circleci/redis:latest
       - image: circleci/mongo:latest
-          command: [mongod, --replSet, rs0]
+        command: [mongod, --replSet, rs0]
       - image: circleci/rabbitmq:3.7.7
-          environment:
-            RABBITMQ_DEFAULT_VHOST: "/"
-          ports:
-            - "15672:15672"
-            - "5672:5672"
-            - "6379:6379"
+        environment:
+          RABBITMQ_DEFAULT_VHOST: "/"
+        ports:
+          - "15672:15672"
+          - "5672:5672"
+          - "6379:6379"
 
     working_directory: ~/repo
 
     steps:
       - checkout
-      - codecov/upload:
-          file: .nyc_output/*.json
-          token: $CODECOV_TOKEN
       - run: sleep 10
 
       - run: sudo apt-get install mongodb-clients
@@ -60,8 +55,9 @@ jobs:
       - run: export BACKEND='mongodb'; export TEST=1; export MODE='grpc'; node bin/perf/protocol.js
       
       
-      - run: npm run test
+      - run: npm run test_coverage
 
+      - run: bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN -f .nyc_output/*.json
 
 workflows:
   version: 2
