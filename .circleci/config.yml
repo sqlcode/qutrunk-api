@@ -1,0 +1,67 @@
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:9.11
+      - image: circleci/redis:latest
+      - image: circleci/mongo:latest
+        command: [mongod, --replSet, rs0]
+      - image: circleci/rabbitmq:3.7.7
+        environment:
+          RABBITMQ_DEFAULT_VHOST: "/"
+        ports:
+          - "15672:15672"
+          - "5672:5672"
+          - "6379:6379"
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - run: sleep 10
+
+      - run: sudo apt-get install mongodb-clients
+      - run: mongo --eval 'rs.initiate()'
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run: npm install
+      # - run: npm rebuild #for sharp js
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run: cp config.js.dist config.js
+      # run tests!
+      - run: export BACKEND='rabbitmq'; node bin/perf/backend.js
+      - run: export BACKEND='mongodb'; node bin/perf/backend.js
+      - run: export BACKEND='redis'; node bin/perf/backend.js
+
+      - run: export BACKEND='rabbitmq'; export TEST=1; export MODE='http'; node bin/perf/protocol.js
+      - run: export BACKEND='rabbitmq'; export TEST=1; export MODE='grpc'; node bin/perf/protocol.js
+      
+      - run: export BACKEND='redis'; export TEST=1; export MODE='http'; node bin/perf/protocol.js
+      - run: export BACKEND='redis'; export TEST=1; export MODE='grpc'; node bin/perf/protocol.js
+
+      - run: export BACKEND='mongodb'; export TEST=1; export MODE='http'; node bin/perf/protocol.js
+      - run: export BACKEND='mongodb'; export TEST=1; export MODE='grpc'; node bin/perf/protocol.js
+      
+      
+      - run: npm run test
+
+workflows:
+  version: 2
+  build:
+   jobs:
+     - build:
+          filters:
+            branches:
+              only: master

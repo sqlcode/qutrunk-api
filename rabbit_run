@@ -1,0 +1,1 @@
+docker run --hostname my-rabbit --name rabbit --rm --net="host" rabbitmq:3.6.6-management

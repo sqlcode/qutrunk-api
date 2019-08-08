@@ -1,0 +1,19 @@
+
+# systemd unit example
+[Unit]
+Description=RabbitMQ broker
+After=network.target epmd@0.0.0.0.socket
+Wants=network.target epmd@0.0.0.0.socket
+
+[Service]
+User=root
+Group=root
+Restart=on-failure
+RestartSec=10
+WorkingDirectory=/var/lib/rabbitmq
+ExecStart=/root/rabbitmq_server/sbin/rabbitmq-server
+ExecStop=/root/rabbitmq_server/sbin/rabbitmqctl stop
+ExecStop=/bin/sh -c "while ps -p $MAINPID >/dev/null 2>&1; do sleep 1; done"
+
+[Install]
+WantedBy=multi-user.target

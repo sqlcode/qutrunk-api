@@ -1,0 +1,89 @@
+wget https://dl.influxdata.com/telegraf/releases/telegraf-1.9.1_linux_amd64.tar.gz;
+tar xf telegraf-1.9.1_linux_amd64.tar.gz;
+rm telegraf-1.9.1_linux_amd64.tar.gz;
+echo '' > telegraf/etc/telegraf/telegraf.conf;
+
+####config below
+[agent]
+  interval = "10s"
+  ## Rounds collection interval to 'interval'
+  ## ie, if interval="10s" then always collect on :00, :10, :20, etc.
+  round_interval = true
+
+  metric_batch_size = 1000
+
+  metric_buffer_limit = 10000
+
+  collection_jitter = "0s"
+
+  flush_interval = "10s"
+  flush_jitter = "0s"
+
+  precision = ""
+
+  debug = false
+  quiet = false
+  logfile = ""
+
+  hostname = ""
+  omit_hostname = false
+
+
+###############################################################################
+#                            OUTPUT PLUGINS                                   #
+###############################################################################
+[[outputs.influxdb]]
+  urls = ["http://dwh.taracorpglobal.com:8066"] # required
+  database = "qutrunk" # required
+  retention_policy = ""
+  write_consistency = "any"
+  timeout = "5s"
+  username = "telegraf"
+  password = "85AT3v2xZ4Qez7d9"
+
+###############################################################################
+#                            INPUT PLUGINS                                    #
+###############################################################################
+[[inputs.system]]
+[[inputs.disk]]
+  ignore_fs = ["tmpfs", "devtmpfs"]
+[[inputs.mem]]
+
+[[inputs.mongodb]]
+  servers = ["mongodb://127.0.0.1:27017"]
+  gather_perdb_stats = true
+
+[[inputs.statsd]]
+  protocol = "udp"
+  max_tcp_connections = 250
+  service_address = ":8125"
+  delete_gauges = true
+  delete_counters = true
+  delete_sets = true
+  delete_timings = true
+  percentiles = [90]
+  metric_separator = "_"
+  parse_data_dog_tags = false
+  allowed_pending_messages = 10000
+  percentile_limit = 1000
+
+[[inputs.procstat]]
+  pid_file = "/var/run/nginx.pid"
+
+
+
+## vim /etc/systemd/system/telegraf.service
+[Unit]
+Description=The plugin-driven server agent for reporting metrics into InfluxDB
+Documentation=https://github.com/influxdata/telegraf
+After=network.target
+
+[Service]
+ExecStart=/root/telegraf/usr/bin/telegraf -config /root/telegraf/etc/telegraf/telegraf.conf
+Restart=on-failure
+KillMode=control-group
+
+[Install]
+WantedBy=multi-user.target
+
+systemctl enable telegraf.service

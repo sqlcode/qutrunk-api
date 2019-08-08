@@ -1,0 +1,46 @@
+var argv = require('optimist').argv;
+
+module.exports = {
+    //bind address
+    host: '127.0.0.1',
+    //bin port
+    port: argv.port || 3000,
+
+    debug: false,
+    server_timeout_sec: 10,
+
+    //jwtoken string salt
+    secret: 'verysecretstring',
+
+    //an address of application
+    api_address: 'http://localhost:3000',
+    panel_address: 'http://localhost:8080',
+
+    smtp: {
+        host: 'smtp.emailprovider.org',
+        user: 'postmaster@domainofyourchoice.com',
+        sender: 'no-reply@domainofyourchoice.com',
+        password: 'password',
+        port: 587,
+        secure: false,
+    },
+    
+    stats_queue: {
+        provider: 'rabbitmq',
+        connection: {
+            addr: 'amqp://localhost:5672,amqp://localhost:5673,amqp://localhost:5674'
+        }
+    },
+
+    grpc_server: {
+        addr: '0.0.0.0:5001',
+    },
+
+    mongo: 'mongodb://localhost:27017/qutrunk',
+    
+    bitbucket_app_id: '',
+    bitbucket_secret: '',
+
+    github_app_id: '',
+    github_secret: '',
+}

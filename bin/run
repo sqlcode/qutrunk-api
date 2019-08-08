@@ -1,0 +1,1 @@
+export DEBUG=nighty-api:*; nodemon app.js
