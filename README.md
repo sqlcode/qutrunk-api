@@ -80,6 +80,10 @@ After all, we didn't find any similar tool that could use multiple backends that
 
 Currently we have a single deployment on 3-node cluster (each has 1 vCPU, 2gb RAM, 20 GB HDD) with MongoDB as replica and RabbitMQ with replication. It processes over 1 500 000 messages per day (about 17 msg/s) providing queue service for couple of our other internal projects.
 
+Contact: contact@quturnk.com
+
+This project is created and maintained by [Code Fibers](https://codefibershq.com)
+
 # License
 Unless otherwise noted, all Metabase source files are made available under the terms of the GNU Affero General Public License (AGPL).
 See LICENSE.txt for details and exceptions.
