@@ -12,6 +12,18 @@ Qutrunk is a managed queue-as-a-service. Using the simple REST API, you push and
 * Access tokens with access control for pushing/pulling/creating queues
 * StatsD metric export
 
+# Example usage
+You can simply push message with single command
+```sh
+curl --request POST \
+  --url 'https://app.qutrunk.com/api/v1/core/push/{QUEUE_NAME}?access_token=ACCESS_TOKEN' \
+  --data 'hello world'
+```
+and pull it with another
+```sh
+curl --request GET --url 'https://app.qutrunk.com/api/v1/core/pull/{QUEUE_NAME}?access_token={ACCESS_TOKEN}'
+```
+
 # Supported protocols for ingest/digest of messages
 - [x] HTTP(S)
 - [x] gRPC
