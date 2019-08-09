@@ -40,4 +40,17 @@ describe('Mongo - backend queue', ()=>{
 
 
 	})
+
+	it('Should purge a queue', async()=>{
+		await client.push(Q, 'test')
+		await client.purge(Q)
+		let msg = await client.pull(Q)
+		msg.length.should.be.equal(0)
+	})
+
+	it('Should delete a queue', async()=>{
+		await client.delete(Q)
+	})
+
+
 })
