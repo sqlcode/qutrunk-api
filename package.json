@@ -1,7 +1,6 @@
 {
   "name": "qutrunk-api",
-  "version": "0.0.0",
-  "private": true,
+  "version": "1.0.0",
   "scripts": {
     "dev": "node ./bin/run",
     "test": "export TEST=1; ./node_modules/mocha/bin/mocha --timeout 10000 --exit",

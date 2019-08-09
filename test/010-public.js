@@ -119,6 +119,22 @@ describe('Public', function() {
         res.body.user_exists.should.be.equal(true)
     })   
 
+    it(`POST ${URL}/user/remind_password - should not send email remind password`, async()=>{
+        let res = await postReq('/user/remind_password',{ 
+            email: 'not_exists@gmail.com'
+        })
+        res.status.should.be.equal(404)
+        res.body.message.should.be.equal('user_not_found')
+    })
+
+    it(`POST ${URL}/user/remind_password - should send email remind password`, async()=>{
+        let res = await postReq('/user/remind_password',{ 
+            email: 'foobar123@gmail.com'
+        })
+        res.status.should.be.equal(200)
+        res.body.message.should.be.equal('message_sent')
+    })
+
     it(`POST ${URL}/user/reset_password - reset password with generated code`, async ()=> {
         let user = await User.findOne({ _id: userId })
         var code = UserRepository.generateRemindPasswordCode(user)

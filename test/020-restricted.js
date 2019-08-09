@@ -30,8 +30,9 @@ let getReq = (url) => {
 describe('Restricted', function() {
     before((done) => {
         fixtures(async () => {
-            let res = await chai.request(server).post('/api/v1/public/login/email').send({ 
-                email: 'foobar0@gmail.com', password: 'foobar' 
+            let res = await chai.request(server).post('/api/v1/public/login/email').send({
+                email: 'foobar0@gmail.com',
+                password: 'foobar'
             })
             ACCESS_TOKEN = res.body.access_token
             done()
@@ -39,15 +40,14 @@ describe('Restricted', function() {
     })
 
     it(`POST ${URL}/user/password`, async () => {
-        let res = await postReq('/user/password',
-            { new_password: '654321' })
+        let res = await postReq('/user/password', { new_password: '654321' })
         res.should.have.status(200);
         res.body.should.have.property('status');
         res.body.message.should.be.equal('user.password_changed')
         res.body.status.should.equal(true);
     })
 
-    it(`GET ${URL}/status`, async ()=>{
+    it(`GET ${URL}/status`, async () => {
         let res = await getReq('/status')
         res.status.should.be.equal(200)
         res.body.user.should.have.property('name')
@@ -55,15 +55,15 @@ describe('Restricted', function() {
     })
 
     // read, add, remove, read access tokens
-    it(`GET ${URL}/access_token/list`, async ()=>{
+    it(`GET ${URL}/access_token/list`, async () => {
         let res = await getReq('/access_token/list')
         res.status.should.be.equal(200)
         res.body.data.length.should.be.equal(0)
     })
 
     let atId
-    it(`POST ${URL}/access_token`, async ()=>{
-        let res = await postReq('/access_token',{
+    it(`POST ${URL}/access_token`, async () => {
+        let res = await postReq('/access_token', {
             active: true
         })
         res.status.should.be.equal(200)
@@ -77,8 +77,8 @@ describe('Restricted', function() {
         res.body.data[0]._id.should.be.equal(atId)
     })
 
-    it(`GET ${URL}/access_token/show/:id`, async ()=>{
-        let res = await getReq('/access_token/show/'+atId)
+    it(`GET ${URL}/access_token/show/:id`, async () => {
+        let res = await getReq('/access_token/show/' + atId)
 
         res.status.should.be.equal(200)
 
@@ -88,8 +88,8 @@ describe('Restricted', function() {
         res.body.data.access_create_queue.should.be.equal(false)
     })
 
-    it(`POST ${URL}/access_token - edit`, async ()=>{
-        let res = await postReq('/access_token',{
+    it(`POST ${URL}/access_token - edit`, async () => {
+        let res = await postReq('/access_token', {
             _id: atId,
             active: false,
             name: 'api',
@@ -99,7 +99,7 @@ describe('Restricted', function() {
         })
         res.status.should.be.equal(200)
 
-        res = await getReq('/access_token/show/'+atId)
+        res = await getReq('/access_token/show/' + atId)
 
         res.status.should.be.equal(200)
         res.body.data.active.should.be.equal(false)
@@ -109,8 +109,8 @@ describe('Restricted', function() {
         res.body.data.access_create_queue.should.be.equal(true)
     })
 
-    it(`POST ${URL}/access_token/delete`, async ()=>{
-        let res = await postReq('/access_token/delete/'+atId)
+    it(`POST ${URL}/access_token/delete`, async () => {
+        let res = await postReq('/access_token/delete/' + atId)
         res.status.should.be.equal(200)
 
         res = await getReq('/access_token/list')
@@ -120,12 +120,12 @@ describe('Restricted', function() {
     // read, add, remove, read access tokens
 
     let queueId
-    it(`GET ${URL}/queue/list`, async ()=>{
+    it(`GET ${URL}/queue/list`, async () => {
         let res = await getReq('/queue/list')
         res.status.should.be.equal(200)
         res.body.data.length.should.be.equal(0)
     })
-    it(`POST ${URL}/queue`, async ()=>{
+    it(`POST ${URL}/queue`, async () => {
         let res = await postReq('/queue', {
             name: 'foo_queue',
             description: 'description'
@@ -144,7 +144,7 @@ describe('Restricted', function() {
         res.body.data[0]._id.should.be.equal(queueId)
     })
 
-    it(`POST ${URL}/user/quota`, async()=>{
+    it(`POST ${URL}/user/quota`, async () => {
         let res = await postReq('/user/quota', {
             ml: 10,
             ql: 5,
@@ -154,17 +154,17 @@ describe('Restricted', function() {
         res.body.status.should.be.equal(true)
     })
 
-    it(`GET ${URL}/user/quota`, async()=>{
+    it(`GET ${URL}/user/quota`, async () => {
         let res = await getReq('/user/quota')
         res.status.should.be.equal(200)
-        
+
         res.body.status.should.be.equal(true)
         res.body.data.messages_left.should.equal(10)
         res.body.data.queues_left.should.equal(5)
         res.body.data.max_idle_days.should.equal(2)
     })
 
-    it(`POST ${URL}/user/quota - power up`, async()=>{
+    it(`POST ${URL}/user/quota - power up`, async () => {
         let res = await postReq('/user/quota', {
             ml: 1,
             ql: 1,
@@ -174,7 +174,7 @@ describe('Restricted', function() {
         res.body.status.should.be.equal(true)
     })
 
-    it(`GET ${URL}/user/quota`, async()=>{
+    it(`GET ${URL}/user/quota`, async () => {
         let res = await getReq('/user/quota')
         res.status.should.be.equal(200)
 
@@ -184,4 +184,38 @@ describe('Restricted', function() {
         res.body.data.max_idle_days.should.equal(3)
     })
 
+    it(`GET ${URL}/user/email`, async () => {
+        let res = await postReq('/user/email', { email: 'test@asdfghkjxxxxx.com' })
+        res.status.should.be.equal(200)
+
+        res.body.status.should.be.equal(true)
+        res.body.message.should.be.equal('email_changed')
+    })
+
+    it(`GET ${URL}/user/email`, async () => {
+        let res = await postReq('/user/email', { email: 'test@asdfghkjxxxxx.com' })
+        res.status.should.be.equal(400)
+
+        res.body.status.should.be.equal(false)
+        res.body.error.should.be.equal('email_already_taken')
+    })
+
+    it(`GET ${URL}/user/profile`, async () => {
+        let res = await getReq('/user/profile')
+        res.status.should.be.equal(200)
+
+        res.body.user.email.should.be.equal('test@asdfghkjxxxxx.com')
+    })
+
+    it(`GET ${URL}/user/counters`, async () => {
+        let res = await getReq('/user/counters')
+        res.status.should.be.equal(200)
+
+        res.body.counters.queue.should.be.equal(1)
+        res.body.counters.token.should.be.equal(0)
+        res.body.counters.quota.messages_left.should.be.equal(11)
+        res.body.counters.quota.queues_left.should.be.equal(6)
+        res.body.counters.quota.bytes_left.should.be.equal(2000)
+        res.body.counters.quota.max_msg_size.should.be.equal(1024)
+    })
 })

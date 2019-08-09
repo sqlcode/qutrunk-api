@@ -23,32 +23,6 @@ var chance = new Chance()
 
 const { check, validationResult } = require('express-validator/check');
 
-
-let getFileUrl = (token) => {
-    if (!token) {
-        return null
-    }
-    return config.address + '/api/public/file/' + token
-}
-
-let doRequest = async (value) => {
-    return new Promise((resolve, reject) => {
-        request(value, (error, response, data) => {
-            if (error) reject(error)
-            else resolve(data)
-        })
-    })
-}
-
-let asyncRequest = async (value) => {
-    return new Promise((resolve, reject) => {
-        request(value, (error, response, data) => {
-            if (error) reject(error)
-            else resolve({ response, data })
-        })
-    })
-}
-
 /**
  * @swagger
  * resourcePath: /restricted
@@ -184,27 +158,6 @@ router.route('/user/quota').get(async (req, res, next) => {
 
     res.json({
         status: true
-    })
-})
-
-/**
- * @swagger
- * path: /api/restricted/user/quota
- * operations:
- *   -  httpMethod: GET
- *      summary: Zwraca quote
- *      nickname: restricted
- */
-router.route('/queue/:id/log').get(async (req, res, next) => {
-    let u = req.decoded.id
-    let q = await Queue.findOne({ user: req.decoded.id, _id: req.params.id })
-    let user = await User.findOne({ _id: u })
-
-    let data = await MessageLog.find({ queue: q._id })
-
-    res.json({
-        status: true,
-        data: data
     })
 })
 
