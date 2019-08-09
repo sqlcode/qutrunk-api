@@ -35,11 +35,6 @@ describe('Public', function() {
         })
     })
 
-    it(`GET ${URL}/not_existing`, async () => {
-        let res = await getReq('/not_existing')
-        res.should.have.status(404);
-    })
-
     it(`GET ${URL}/health`, async () => {
         let res = await getReq('/health')
         res.should.have.status(200);
