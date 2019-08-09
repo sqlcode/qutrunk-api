@@ -97,7 +97,15 @@ describe('Rabbitmq - backend queue', ()=>{
 	})
 
 	it('Should delete a queue', async()=>{
+		await client.push(Q, 'test')
 		await client.delete(Q)
+
+		try{
+			await client.pull(Q)
+		}catch(e){
+			e.should.not.be.undefined
+		}
+
 	})
 
 })

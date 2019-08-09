@@ -49,7 +49,11 @@ describe('Mongo - backend queue', ()=>{
 	})
 
 	it('Should delete a queue', async()=>{
+		await client.push(Q, 'test')
 		await client.delete(Q)
+		let msg = await client.pull(Q)
+		msg.length.should.be.equal(0)
+
 	})
 
 

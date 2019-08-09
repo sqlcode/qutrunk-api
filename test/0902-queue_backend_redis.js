@@ -42,7 +42,7 @@ describe('Redis - backend queue', ()=>{
 
 
 	})
-	
+
 	it('Should purge a queue', async()=>{
 		await client.push(Q, 'test')
 		await client.purge(Q)
@@ -51,7 +51,15 @@ describe('Redis - backend queue', ()=>{
 	})
 
 	it('Should delete a queue', async()=>{
+		await client.push(Q, 'test')
+
 		await client.delete(Q)
+
+		try{
+			await client.pull(Q)
+		}catch(e){
+			e.should.not.be.undefined
+		}
 	})
 
 })
